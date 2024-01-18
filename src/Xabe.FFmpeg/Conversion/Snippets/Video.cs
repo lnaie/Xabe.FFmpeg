@@ -160,6 +160,7 @@ namespace Xabe.FFmpeg
         /// <returns>Conversion result</returns>
         internal static async Task<IConversion> Concatenate(string output, params string[] inputVideos)
         {
+            // https://ffmpeg.xabe.net/joining_videos.html
             if (inputVideos.Length <= 1)
             {
                 throw new ArgumentException("You must provide at least 2 files for the concatenation to work", "inputVideos");
@@ -171,7 +172,6 @@ namespace Xabe.FFmpeg
             foreach (var inputVideo in inputVideos)
             {
                 IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(inputVideo);
-
                 mediaInfos.Add(mediaInfo);
                 conversion.AddParameter($"-i {inputVideo.Escape()} ");
             }
@@ -179,14 +179,10 @@ namespace Xabe.FFmpeg
             conversion.AddParameter($"-t 1 -f lavfi -i anullsrc=r=48000:cl=stereo");
             conversion.AddParameter($"-filter_complex \"");
 
-            IVideoStream maxResolutionMedia = mediaInfos.Select(x => x.VideoStreams.OrderByDescending(z => z.Width)
-                                                                      .First())
-                                                        .OrderByDescending(x => x.Width)
-                                                        .First();
+            IVideoStream maxResolutionMedia = mediaInfos.Select(x => x.VideoStreams.OrderByDescending(z => z.Width).First()).OrderByDescending(x => x.Width).First();
             for (var i = 0; i < mediaInfos.Count; i++)
             {
-                conversion.AddParameter(
-                    $"[{i}:v]scale={maxResolutionMedia.Width}:{maxResolutionMedia.Height},setdar=dar={maxResolutionMedia.Ratio},setpts=PTS-STARTPTS[v{i}]; ");
+                conversion.AddParameter($"[{i}:v]scale={maxResolutionMedia.Width}:{maxResolutionMedia.Height},setdar=dar={maxResolutionMedia.Ratio},setpts=PTS-STARTPTS[v{i}]; ");
             }
 
             for (var i = 0; i < mediaInfos.Count; i++)
@@ -196,6 +192,34 @@ namespace Xabe.FFmpeg
 
             conversion.AddParameter($"concat=n={inputVideos.Length}:v=1:a=1 [v] [a]\" -map \"[v]\" -map \"[a]\"");
             conversion.AddParameter($"-aspect {maxResolutionMedia.Ratio}");
+            return conversion.SetOutput(output);
+        }
+
+        /// <summary>
+        ///     Transform input media using a custom set of FFMPEG params.
+        /// </summary>
+        /// <param name="parameters">FFMPEG parameters</param>
+        /// <param name="output">The output media of this action</param>
+        /// <param name="input">Input file(s)</param>
+        /// <returns>Conversion result</returns>
+        internal static async Task<IConversion> Transform(string output, string parameters, IEnumerable<string> input) {
+            if (input == null || input.Count() == 0)
+                throw new ArgumentException("You must provide at least 1 file for the transformation to work", "input");
+
+            var mediaInfos = new List<IMediaInfo>();
+
+            IConversion conversion = New();
+            foreach (var f in input) {
+                if (f == null) continue;
+
+                var mediaInfo = await FFmpeg.GetMediaInfo(f);
+                mediaInfos.Add(mediaInfo);
+                conversion.AddParameter($"-i {f.Escape()} ");
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters))
+                conversion.AddParameter(parameters);
+
             return conversion.SetOutput(output);
         }
 

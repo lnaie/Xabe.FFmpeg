@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace Xabe.FFmpeg.Test
 {
@@ -16,7 +17,7 @@ namespace Xabe.FFmpeg.Test
         internal static readonly string FlvWithAudio = GetResourceFilePath("sample.flv");
         internal static readonly string BunnyMp4 = GetResourceFilePath("bunny.mp4");
         internal static readonly string SloMoMp4 = GetResourceFilePath("slomo.mp4");
-        internal static readonly string Dll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Xabe.FFmpeg.Test.dll");
+        internal static readonly string Dll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Xabe.FFmpeg.Test.dll");
 
         internal static readonly string Images = GetResourceFilePath("Images");
 
@@ -24,6 +25,10 @@ namespace Xabe.FFmpeg.Test
 
         internal static readonly string FFbinariesInfo = GetResourceFilePath("ffbinaries.json");
 
-        internal static string GetResourceFilePath(string fileName) => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", fileName);
+        internal static string GetResourceFilePath(string fileName) => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Resources", fileName);
+
+        internal static readonly string SbVideo1 = GetResourceFilePath("sb-video.mp4");
+        internal static readonly string SbVideo2 = GetResourceFilePath("sb-agent-static.mp4");
+        internal static readonly string SbImage1 = GetResourceFilePath("sb-agent.png");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xabe.FFmpeg.Streams.SubtitleStream;
@@ -336,7 +337,7 @@ namespace Xabe.FFmpeg
         }
 
         /// <summary>
-        ///     Concat multiple inputVideos.
+        ///     Concat multiple input videos with a predefined ser of FFMPEG params, that are detailed at https://ffmpeg.xabe.net/joining_videos.html.
         /// </summary>
         /// <param name="output">Concatenated inputVideos</param>
         /// <param name="inputVideos">Videos to add</param>
@@ -344,6 +345,17 @@ namespace Xabe.FFmpeg
         public async Task<IConversion> Concatenate(string output, params string[] inputVideos)
         {
             return await Conversion.Concatenate(output, inputVideos);
+        }
+
+        /// <summary>
+        ///     Transform input media using a custom set of FFMPEG params.
+        /// </summary>
+        /// <param name="parameters">FFMPEG parameters</param>
+        /// <param name="output">The output media of this action</param>
+        /// <param name="input">Input file(s)</param>
+        /// <returns>Conversion result</returns>
+        public async Task<IConversion> Transform(string output, string parameters, params string[] input) {
+            return await Conversion.Transform(output, parameters, input);
         }
 
         /// <summary>
