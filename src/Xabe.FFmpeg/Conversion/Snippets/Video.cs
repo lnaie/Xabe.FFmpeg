@@ -208,7 +208,7 @@ namespace Xabe.FFmpeg
 
             var mediaInfos = new List<IMediaInfo>();
 
-            IConversion conversion = New();
+            IConversion conversion = New(true);
             foreach (var f in input) {
                 if (f == null) continue;
 

@@ -530,11 +530,11 @@ namespace Xabe.FFmpeg
             return false;
         }
 
-        internal static IConversion New()
+        internal static IConversion New(bool overWrite = false)
         {
             var conversion = new Conversion();
             return conversion
-                .SetOverwriteOutput(false);
+                .SetOverwriteOutput(overWrite);
         }
 
         /// <inheritdoc />

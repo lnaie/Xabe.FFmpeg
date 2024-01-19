@@ -22,7 +22,7 @@
     <DelaySign>false</DelaySign>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIconUrl>https://xabe.net/assets/new_xabe_logo-100x100.png</PackageIconUrl>
-    <PackageVersion>5.2.6-sb</PackageVersion>
+    <PackageVersion>5.2.7-beta-2</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

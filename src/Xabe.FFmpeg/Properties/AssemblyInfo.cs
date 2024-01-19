@@ -11,5 +11,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Xabe.FFmpeg")]
 [assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/tomaszzmuda/Xabe.FFmpeg")]
 
-[assembly: AssemblyVersion("5.2.6.1")]
-[assembly: AssemblyFileVersion("5.2.6.1")]
+[assembly: AssemblyVersion("5.2.7.2")]
+[assembly: AssemblyFileVersion("5.2.7.2")]
